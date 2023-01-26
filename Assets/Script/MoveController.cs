@@ -8,6 +8,8 @@ public class MoveController : MonoBehaviour
     // 내 컴포넌트
     private Rigidbody2D myRigid;
     private Animator anim;
+    [SerializeField]
+    private Animator effectAnim;
     private AttackController attackController;
     private PlayerFoot playerFoot;
 
@@ -162,6 +164,8 @@ public class MoveController : MonoBehaviour
             isRunning = false;
             anim.SetFloat("runSpeed", 0.6f);
 
+            effectAnim.SetTrigger("walk");
+
             // 걷기 게이지 코루틴
             if (walkCor != null)
                 StopCoroutine(walkCor);
@@ -187,12 +191,15 @@ public class MoveController : MonoBehaviour
                     speed = runSpeed * 1.8f;
 
                     runFast = true;
+                    effectAnim.SetTrigger("runFast");
 
                     walkCurrentTime = 0;
 
                     StartCoroutine("RunFast");
                 }
+                else effectAnim.SetTrigger("default");
             }
+            else effectAnim.SetTrigger("default");
 
             // 걷기 게이지 코루틴
             if (walkCor != null)
@@ -235,6 +242,8 @@ public class MoveController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         anim.SetFloat("runSpeed", 1f);
+        effectAnim.SetTrigger("default");
+
         speed = runSpeed;
 
         runFast = false;
@@ -276,6 +285,7 @@ public class MoveController : MonoBehaviour
         }
 
         anim.SetTrigger("hit");
+        effectAnim.SetTrigger("hit");
 
         if (currentHealth == 0)
         {
@@ -300,6 +310,7 @@ public class MoveController : MonoBehaviour
         {
             isRunning = true;
             anim.SetFloat("runSpeed", 1f);
+            effectAnim.SetTrigger("default");
             // 걷기 게이지 코루틴
             if (walkCor != null)
                 StopCoroutine(walkCor);
@@ -332,6 +343,7 @@ public class MoveController : MonoBehaviour
         isDie = true;
         anim.SetBool("isDie", true);
         anim.SetTrigger("hit");
+        effectAnim.SetTrigger("default");
         cameraMove.CameraStop();
    
         for(int i = 0; i < backgrounds.Length; i++)

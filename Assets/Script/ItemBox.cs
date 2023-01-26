@@ -24,7 +24,7 @@ public class ItemBox : MonoBehaviour
 
         if (collision.tag == "PlayerProjectile" || collision.tag == "PlayerAttack")
         {
-            // anim.SetTrigger("unbox");
+            anim.SetTrigger("unbox");
 
             canUseItem = true;
 
@@ -47,14 +47,17 @@ public class ItemBox : MonoBehaviour
             {
                 if (itemPercent[i - 1] < value && value <= itemPercent[i])
                 {
-                    GameObject clone = Instantiate(itemPrefabs[i - 1], transform.position, Quaternion.identity);
+                    GameObject clone = Instantiate(itemPrefabs[i - 1], transform.position + Vector3.up * 0.8f, Quaternion.identity);
                     innerItem = clone;
 
                     break;
                 }
             }
+        } 
+    }
 
-            this.GetComponent<SpriteRenderer>().enabled = false;
-        }
+    public void DoDisappear()
+    {
+        Destroy(gameObject);
     }
 }

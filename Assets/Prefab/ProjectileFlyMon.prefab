@@ -76,8 +76,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 15
-  m_Sprite: {fileID: 21300000, guid: cf7fa998208b0ca418c45c6acc32ba35, type: 3}
+  m_SortingOrder: 201
+  m_Sprite: {fileID: 21300000, guid: aaab8855d0b4cf24fadb00f325b50a3d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: -5
   isMine: 0
+  boomEffect: {fileID: 6653231958198354141, guid: e5ac1211ede296646989dbfee78e0c56, type: 3}
 --- !u!114 &-3060116957396848180
 MonoBehaviour:
   m_ObjectHideFlags: 0

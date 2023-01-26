@@ -73,7 +73,7 @@ public class AttackController : MonoBehaviour
             if (moveController.invinsible) return;
 
             animator.SetTrigger("shootAttack");
-            GameObject clone = Instantiate(projectile, transform.position + Vector3.right * 2f + Vector3.up * -0.35f, Quaternion.identity);
+            GameObject clone = Instantiate(projectile, transform.position + Vector3.right * 2f + Vector3.up * -0f, Quaternion.identity);
             clone.GetComponent<Projectile>().speed = moveController.RunSpeed * 2;
 
             shootCurrentCooldown = shootCooldown;

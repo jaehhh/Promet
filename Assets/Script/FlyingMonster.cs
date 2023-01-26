@@ -6,6 +6,8 @@ public class FlyingMonster : MonoBehaviour
 {
     [SerializeField]
     private GameObject projectile;
+    [SerializeField]
+    private GameObject destroyEffect;
 
     private IEnumerator moveCor;
     private bool isDie;
@@ -67,10 +69,16 @@ public class FlyingMonster : MonoBehaviour
             GetComponent<Rigidbody2D>().gravityScale = 2f;
             isDie = true;
             GetComponent<Animator>().SetBool("isDie", true);
+
+            GameObject clone = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+            clone.transform.SetParent(this.transform);
         }
         else if(collision.tag == "PlayerAttack")
         {
             Destroy(gameObject);
+
+            GameObject clone = Instantiate(destroyEffect, transform.position, Quaternion.identity);
+            clone.transform.SetParent(this.transform);
         }
     }
 
@@ -84,11 +92,11 @@ public class FlyingMonster : MonoBehaviour
         {
             if(isDie)
             {
-                collision.transform.GetComponent<MoveController>().PlayerHit(2);
+                collision.transform.GetComponent<MoveController>().PlayerHit();
             }
             else
             {
-                collision.transform.GetComponent<MoveController>().PlayerHit();
+                collision.transform.GetComponent<MoveController>().PlayerHit(2);
             }
 
             Destroy(gameObject);

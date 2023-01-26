@@ -56,7 +56,7 @@ public class Item : MonoBehaviour
 
                 case (attackCollisionType.block):
                     if (collision.tag == "PlayerAttack") break;
-                    Destroy(collision.gameObject);
+                    collision.GetComponent<Projectile>().DoHit();
                     break;
 
                 case (attackCollisionType.broken):

@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     public float speed = 20;
     [SerializeField]
     private bool isMine = true;
+    [SerializeField]
+    private GameObject boomEffect;
 
     private void Update()
     {
@@ -21,25 +23,40 @@ public class Projectile : MonoBehaviour
         {
             if (collision.tag == "MonsterProjectile")
             {
-                Destroy(gameObject);
+                DoHit();
             }
             else if(collision.tag == "Monster")
             {
-                Destroy(gameObject);
+                DoHit();
             }
         }
         else
         {
-            if(collision.tag == "Player")
+            if (collision.tag == "Player")
             {
                 bool isHit = collision.transform.GetComponent<MoveController>().PlayerHit();
 
-                if(isHit) Destroy(gameObject);
+                if (isHit) DoHit();
             }
-            else if (collision.tag == "PlayerProjectile" || collision.tag == "PlayerAttack")
+            else if (collision.tag == "PlayerProjectile")
+            {
+                DoHit();
+            }
+            else if(collision.tag == "PlayerAttack")
             {
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void DoHit()
+    {
+        Instantiate(boomEffect, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
+    public void DoDisappear()
+    {
+        Destroy(gameObject);
     }
 }

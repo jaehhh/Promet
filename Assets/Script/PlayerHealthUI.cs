@@ -29,20 +29,19 @@ public class PlayerHealthUI : MonoBehaviour
     {
         for(int i = 0; i < points.Length; i++)
         {
-            GameObject clone = Instantiate(healthPointPrefab, this.transform);
-            points[i] = clone;
+            points[i] = transform.GetChild(i).gameObject;
         }
     }
 
     public void DecreaseHealth()
     {
         if (currentHealth > 0)
-            points[--currentHealth].GetComponent<Image>().sprite = offHealth;
+            points[--currentHealth].GetComponent<Image>().enabled = false;
     }
 
     public void IncreaseHealth()
     {
-        if(currentHealth < points.Length)
-        points[currentHealth++].GetComponent<Image>().sprite = onHealth;
+        if (currentHealth < points.Length)
+            points[currentHealth++].GetComponent<Image>().enabled = true;
     }
 }
