@@ -169,7 +169,7 @@ MonoBehaviour:
   - {fileID: 4824991150654580585, guid: 97b1f05d98144ca4eabbe8bb60b77209, type: 3}
   itemPercent:
   - 0
-  - 40
+  - 50
   - 20
 --- !u!114 &8734405212036711660
 MonoBehaviour:
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3a77f6568a61bb4ca4b65b5321863df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: -4
+  distance: -20
 --- !u!95 &9191476964501309145
 Animator:
   serializedVersion: 4

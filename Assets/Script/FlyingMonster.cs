@@ -19,10 +19,26 @@ public class FlyingMonster : MonoBehaviour
     {
         // runSpeed = GameObject.Find("Person").GetComponent<MoveController>().RunSpeed;
 
+        StartCoroutine("DownFlyAtFirst");
+    }
+
+    private IEnumerator DownFlyAtFirst()
+    {
+        float posY = 1f;
+
+        while (posY >= 0.5f)
+        {
+            posY -= 0.7f * Time.deltaTime;
+
+            Vector2 pos = Camera.main.ViewportToWorldPoint(new Vector2(0.9f , posY));
+            transform.position = pos;
+
+            yield return null;
+        }
+
         moveCor = FlyKeepDistance();
         StartCoroutine(moveCor);
-
-        Invoke("Attack", 1.5f);
+        Invoke("Attack", 0.5f);
     }
 
     private IEnumerator FlyKeepDistance()
@@ -66,19 +82,17 @@ public class FlyingMonster : MonoBehaviour
     {
         if(collision.tag == "PlayerProjectile")
         {
-            GetComponent<Rigidbody2D>().gravityScale = 2f;
+
+            GetComponent<Rigidbody2D>().gravityScale = 3.5f;
+            GetComponent<Collider2D>().isTrigger = false;
             isDie = true;
             GetComponent<Animator>().SetBool("isDie", true);
-
-            GameObject clone = Instantiate(destroyEffect, transform.position, Quaternion.identity);
-            clone.transform.SetParent(this.transform);
         }
         else if(collision.tag == "PlayerAttack")
         {
             Destroy(gameObject);
 
-            GameObject clone = Instantiate(destroyEffect, transform.position, Quaternion.identity);
-            clone.transform.SetParent(this.transform);
+            Instantiate(destroyEffect, transform.position, Quaternion.identity);
         }
     }
 

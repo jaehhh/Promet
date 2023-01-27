@@ -48,7 +48,7 @@ public class MoveController : MonoBehaviour
     private IEnumerator walkCor;
     [HideInInspector]
     public float accelerateSpeed;
-    private float dashAccelerate = 8f;
+    private float dashAccelerate = 5f;
     [HideInInspector]
     public bool hitPillar; // 기둥에 닿았는가
     private float pillarCameraleaveSpeed = 0.75f; // 기둥에 닿을 때 카메라 떠나는 초당 속도;
@@ -69,8 +69,10 @@ public class MoveController : MonoBehaviour
     private int currentHealth;
     [HideInInspector]
     public bool invinsible;
-    private float invinsibleTime = 0.3f;
-    private bool isDie;
+    private float invinsibleTime = 0.8f;
+    private bool hitting; // 피격시 이동속도 감소
+    private float hittingTime = 0.2f;
+    public bool isDie;
     public bool isGameRunning;
 
     private void Awake()
@@ -106,7 +108,7 @@ public class MoveController : MonoBehaviour
         // 스피드값 조정
         addSpeed = 1f;
         if (!isRunning) addSpeed *= 0.6f; // 걷기 속도
-        if (invinsible) addSpeed *= 0.5f; // 피격시 이동 속도
+        if (hitting) addSpeed *= 0.5f; // 피격시 이동 속도
         if (attackController.isDash)
         {
             if(accelerateSpeed < 1f)
@@ -149,7 +151,6 @@ public class MoveController : MonoBehaviour
 
             myRigid.velocity = Vector2.zero;
             myRigid.AddForce(Vector2.up * 730f);
-            anim.SetBool("isJump", true);
         }
 
         // 걷기
@@ -274,7 +275,7 @@ public class MoveController : MonoBehaviour
         if (currentHealth < damage)
             damage = currentHealth;
 
-        currentHealth -= damage;
+        // currentHealth -= damage; // 디버깅
 
         if (playerHealthUI != null)
         {
@@ -294,10 +295,12 @@ public class MoveController : MonoBehaviour
 
         else
         {
+            hitting = true;
             invinsible = true;
             Color color = GetComponent<SpriteRenderer>().color;
             color.a = 0.5f;
             GetComponent<SpriteRenderer>().color = color;
+            Invoke("HittingChange", hittingTime);
             Invoke("InvinsibleChange", invinsibleTime);
         }
 
@@ -327,6 +330,11 @@ public class MoveController : MonoBehaviour
         Color color = GetComponent<SpriteRenderer>().color;
         color.a = 1f;
         GetComponent<SpriteRenderer>().color = color;
+    }
+
+    private void HittingChange()
+    {
+        hitting = false;
     }
 
     public void PlayerHeal()

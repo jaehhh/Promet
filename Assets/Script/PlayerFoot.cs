@@ -12,11 +12,25 @@ public class PlayerFoot : MonoBehaviour
     private Collider2D footCollider;
     private float ground0Time;
 
+    private bool debuging;
+
     private void Awake()
     {
         attackController = GetComponentInParent<AttackController>();
         moveContoller = GetComponentInParent<MoveController>();
         rigid = GetComponentInParent<Rigidbody2D>();
+    }
+
+    private void Update()
+    {
+        Debug.Log($"ground : {moveContoller.grounds}");
+
+        if (moveContoller.grounds >= 1 && moveContoller.isJump)
+        {
+            Debug.LogWarning($"그라운드 검출되었지만 공중상태");
+            debuging = true;
+        }
+        
     }
 
     // 점프 상승중일 때는 충돌X, 하강일 때 땅과 충돌
@@ -39,9 +53,9 @@ public class PlayerFoot : MonoBehaviour
             yield return null;
         }
 
-        StopCoroutine("CheckGround0Bug");
-        ground0Time = 0;
-        StartCoroutine("CheckGround0Bug");
+        //StopCoroutine("CheckGround0Bug");
+        //  ground0Time = 0;
+        //StartCoroutine("CheckGround0Bug");
     }
 
     private IEnumerator CheckGround0Bug()
@@ -75,10 +89,22 @@ public class PlayerFoot : MonoBehaviour
             {
                 moveContoller.SetIsJump(false);
                 moveContoller.isJump = false;
+
+                rigid.velocity = new Vector2(rigid.velocity.x, rigid.velocity.y * 0.2f); // 땅속 뚫는 버그 방지 속도 감속
             }
+
+            //if (moveContoller.grounds >= 1 && )
         }
 
-    
+   
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (moveContoller.grounds >= 3 || debuging)
+        {
+            Debug.LogWarning($"{collision.name}의 부모 : {collision.transform.parent.position}, 위치 {collision.transform.position}");
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -88,7 +114,7 @@ public class PlayerFoot : MonoBehaviour
         if (collision.transform.tag == "Ground")
         {
             moveContoller.grounds -= 1;
-            if (moveContoller.grounds < 0) moveContoller.grounds = 0;
+            if (moveContoller.grounds < 0) Debug.LogWarning($"ground 음수");
 
             if (moveContoller.grounds == 0)
             {

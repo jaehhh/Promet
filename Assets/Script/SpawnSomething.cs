@@ -61,4 +61,9 @@ public class SpawnSomething : MonoBehaviour
     {
         Instantiate(itemBox, player.transform.position + Vector3.right * 18, Quaternion.identity);
     }
+
+    public void DebugGround()
+    {
+        Debug.LogWarning("");
+    }
 }

@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3a77f6568a61bb4ca4b65b5321863df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: -4
+  distance: -20
 --- !u!1 &1658784847934816519
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 6602653711036418745}
   - component: {fileID: 4152431111583601257}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,3 +287,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d9184c1e5f754429a757ba9fc5c7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 5192005603544130935, guid: 4cb7a5b0dc6a4204ca885e284c1a6fde, type: 3}

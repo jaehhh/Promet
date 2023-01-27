@@ -60,6 +60,7 @@ public class AttackController : MonoBehaviour
             if (isDash) return;
             if (moveController.runFast) return;
             if (moveController.invinsible) return;
+            if (moveController.isDie) return;
 
             animator.SetTrigger("meleeAttack");
             meleeCurrentCooldown = meleeCooldown;
@@ -71,6 +72,7 @@ public class AttackController : MonoBehaviour
             if (shootCurrentCooldown > 0) return;
             if (isDash) return;
             if (moveController.invinsible) return;
+            if (moveController.isDie) return;
 
             animator.SetTrigger("shootAttack");
             GameObject clone = Instantiate(projectile, transform.position + Vector3.right * 2f + Vector3.up * -0f, Quaternion.identity);
@@ -130,7 +132,7 @@ public class AttackController : MonoBehaviour
 
                 Camera.main.GetComponent<CameraMove>().FollowingTarget();
 
-                moveController.accelerateSpeed = 0f; // 대쉬 가속스피드 초기화
+                moveController.accelerateSpeed = 0.4f; // 대쉬 가속스피드 초기화
 
                 yield break;
             }

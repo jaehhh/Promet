@@ -12,6 +12,12 @@ public class Item : MonoBehaviour
     [SerializeField]
     private attackCollisionType attackCollisionType_;
 
+    public void Setup()
+    {
+        if(!gameObject.activeSelf)
+        gameObject.SetActive(true);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.transform.tag == "Ground")
@@ -26,12 +32,12 @@ public class Item : MonoBehaviour
             {
                 case (playerCollisionType.heal):
                     collision.transform.GetComponent<MoveController>().PlayerHeal();
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                     break;
 
                 case (playerCollisionType.hit):
                     bool isHit = collision.transform.GetComponent<MoveController>().PlayerHit();
-                    if (isHit) Destroy(gameObject);
+                    if (isHit) gameObject.SetActive(false);
                     break;
 
                 case (playerCollisionType.block):
@@ -60,7 +66,7 @@ public class Item : MonoBehaviour
                     break;
 
                 case (attackCollisionType.broken):
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                     break;
 
                 default:
@@ -74,12 +80,12 @@ public class Item : MonoBehaviour
             {
                 case (playerCollisionType.heal):
                     collision.GetComponent<MoveController>().PlayerHeal();
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                     break;
 
                 case (playerCollisionType.hit):
                     bool isHit = collision.GetComponent<MoveController>().PlayerHit();
-                    if (isHit) Destroy(gameObject);
+                    if (isHit) gameObject.SetActive(false);
                     break;
 
                 case (playerCollisionType.block):

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Handspike : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject itemPrefab;
+
     private bool activation;
     private float currentZ; // 처음 값
     private float maxZ; // 도달해야하는 값
@@ -22,7 +25,7 @@ public class Handspike : MonoBehaviour
 
         if (collision.tag == "Player" || collision.tag == "PlayerFoot")
         {
-            StartCoroutine("RotateHandle");
+            RotateHandle();
         }
 
     }
@@ -49,6 +52,8 @@ public class Handspike : MonoBehaviour
         else
         {
             currentZ = maxZ;
+
+            Instantiate(itemPrefab, transform.position + Vector3.up * 9f + Vector3.right * 17f, Quaternion.identity);
         }
     }
 }
