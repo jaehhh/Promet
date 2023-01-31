@@ -8,6 +8,11 @@ public class FlyingMonster : MonoBehaviour
     private GameObject projectile;
     [SerializeField]
     private GameObject destroyEffect;
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip shootClip;
+    [SerializeField]
+    private AudioClip hitClip;
 
     private IEnumerator moveCor;
     private bool isDie;
@@ -18,6 +23,7 @@ public class FlyingMonster : MonoBehaviour
     private void Awake()
     {
         // runSpeed = GameObject.Find("Person").GetComponent<MoveController>().RunSpeed;
+        audioSource = GetComponent<AudioSource>();
 
         StartCoroutine("DownFlyAtFirst");
     }
@@ -26,7 +32,7 @@ public class FlyingMonster : MonoBehaviour
     {
         float posY = 1f;
 
-        while (posY >= 0.5f)
+        while (posY >= 0.4f)
         {
             posY -= 0.7f * Time.deltaTime;
 
@@ -52,7 +58,7 @@ public class FlyingMonster : MonoBehaviour
                 addPos += -0.2f * Time.deltaTime;
             }
 
-            Vector2 pos = Camera.main.ViewportToWorldPoint(new Vector2(0.9f + addPos, 0.5f));
+            Vector2 pos = Camera.main.ViewportToWorldPoint(new Vector2(0.9f + addPos, 0.4f));
 
             if (isDie)
             {
@@ -75,6 +81,9 @@ public class FlyingMonster : MonoBehaviour
 
         ++shootTime;
 
+        audioSource.clip = shootClip;
+        audioSource.Play();
+
         Invoke("Attack", 3.5f);
     }
 
@@ -87,6 +96,9 @@ public class FlyingMonster : MonoBehaviour
             GetComponent<Collider2D>().isTrigger = false;
             isDie = true;
             GetComponent<Animator>().SetBool("isDie", true);
+
+            audioSource.clip = hitClip;
+            audioSource.Play();
         }
         else if(collision.tag == "PlayerAttack")
         {

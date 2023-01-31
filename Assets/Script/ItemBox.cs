@@ -26,6 +26,8 @@ public class ItemBox : MonoBehaviour
         {
             anim.SetTrigger("unbox");
 
+            GetComponent<AudioSource>().Play();
+
             canUseItem = true;
 
             // 확률 누적하면서 아이템당 0~100 사이 특정 범위 수치 값을 정함

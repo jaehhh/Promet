@@ -5,6 +5,11 @@ using UnityEngine;
 public class MapSpawn : MonoBehaviour
 {
     [SerializeField]
+    private bool isTest;
+    [SerializeField]
+    private GameObject[] debugingButton;
+
+    [SerializeField]
     private GameObject map;
 
     private Transform cam;
@@ -41,23 +46,26 @@ public class MapSpawn : MonoBehaviour
 
         cam = Camera.main.transform;
 
+        if(isTest == false)
         EnemySpawn();
-
+        else
+        {
+            for(int i = 0; i < debugingButton.Length; ++i )
+            debugingButton[i].SetActive(true);
+        }
     }
 
     private void Update()
     {
-        PlayerCheck();
-    }
-
-        private void PlayerCheck()
-    {
-        if(cam.position.x >= removeAtPosX)
+        if (cam.position.x >= removeAtPosX) // 플레이어 위치 체크
         {
-            // SpawnNewMap();
-            PickMap();
+            if (isTest)
+                SpawnNewMap();
+            else
+                PickMap();
         }
     }
+
 
     private void PickMap()
     {

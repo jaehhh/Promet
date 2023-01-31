@@ -26,6 +26,8 @@ public class Handspike : MonoBehaviour
         if (collision.tag == "Player" || collision.tag == "PlayerFoot")
         {
             RotateHandle();
+
+            GetComponentInParent<AudioSource>().Play();
         }
 
     }

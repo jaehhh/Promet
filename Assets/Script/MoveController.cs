@@ -12,7 +12,28 @@ public class MoveController : MonoBehaviour
     private Animator effectAnim;
     private AttackController attackController;
     private PlayerFoot playerFoot;
+    [SerializeField]
+    private AudioSource footAudioSource;
+    [SerializeField]
+    private AudioSource effectAudioSource;
 
+    // 오디오클립
+    [SerializeField]
+    private AudioClip jumpClip;
+    [SerializeField]
+    private AudioClip runFastClip;
+    [SerializeField]
+    private AudioClip highJumpClip;
+    [SerializeField]
+    private AudioClip hitClip;
+    [SerializeField]
+    private AudioClip dieClip;
+    [SerializeField]
+    private AudioClip chargeClip;
+    [SerializeField]
+    private AudioClip landingClip;
+
+    // 키
     private KeyCode jumpKey;
     private KeyCode walkKey;
 
@@ -151,6 +172,9 @@ public class MoveController : MonoBehaviour
 
             myRigid.velocity = Vector2.zero;
             myRigid.AddForce(Vector2.up * 730f);
+
+            footAudioSource.clip = jumpCurrentTime == 0 ? jumpClip :highJumpClip;
+            footAudioSource.Play();
         }
 
         // 걷기
@@ -159,6 +183,7 @@ public class MoveController : MonoBehaviour
             if (isRunning == false) return;
             if (runFast) return;
             if (invinsible) return;
+            if (walkRemainTime <= 0) return;
 
             walkCurrentTime = Time.time;
 
@@ -166,6 +191,10 @@ public class MoveController : MonoBehaviour
             anim.SetFloat("runSpeed", 0.6f);
 
             effectAnim.SetTrigger("walk");
+
+            effectAudioSource.clip = chargeClip;
+            effectAudioSource.volume = 0.4f;
+            effectAudioSource.Play();
 
             // 걷기 게이지 코루틴
             if (walkCor != null)
@@ -180,6 +209,9 @@ public class MoveController : MonoBehaviour
 
             isRunning = true;
             anim.SetFloat("runSpeed", 1f);
+
+            if (effectAudioSource.clip == chargeClip)
+            effectAudioSource.Stop();
 
             // 전력질주
             if (walkCurrentTime != 0 && !attackController.isDash && !attackController.recoveringSpeed)
@@ -222,6 +254,7 @@ public class MoveController : MonoBehaviour
             sliderWalk.value = walkRemainTime / walkMaxTime;
 
             yield return new WaitForSeconds(Time.deltaTime);
+            
 
             if (sliderWalk.value >= 1)
             {
@@ -229,9 +262,19 @@ public class MoveController : MonoBehaviour
 
                 break;
             }
-            else if ( sliderWalk.value <= 0)
+            else if ( sliderWalk.value <= 0) // 걷기 게이지 소진시
             {
                 walkRemainTime = 0;
+
+                // 걷기 종료
+                isRunning = true;
+                anim.SetFloat("runSpeed", 1f);
+                effectAnim.SetTrigger("default");
+                walkCor = ProgressWalkTime(1);
+                StartCoroutine(walkCor);
+
+                if (effectAudioSource.clip == chargeClip)
+                    effectAudioSource.Stop();
 
                 break;
             }
@@ -240,6 +283,10 @@ public class MoveController : MonoBehaviour
 
     private IEnumerator RunFast()
     {
+        effectAudioSource.clip = runFastClip;
+        effectAudioSource.volume = 1f;
+        effectAudioSource.Play();
+
         yield return new WaitForSeconds(0.5f);
 
         anim.SetFloat("runSpeed", 1f);
@@ -262,6 +309,9 @@ public class MoveController : MonoBehaviour
             jumpCurrentTime = 0;
             anim.SetInteger("jumpTime", 0);
             anim.SetBool("isJump", false);
+
+            footAudioSource.clip = landingClip;
+            footAudioSource.Play();
         }
     }
 
@@ -275,7 +325,7 @@ public class MoveController : MonoBehaviour
         if (currentHealth < damage)
             damage = currentHealth;
 
-        // currentHealth -= damage; // 디버깅
+        currentHealth -= damage;
 
         if (playerHealthUI != null)
         {
@@ -291,6 +341,7 @@ public class MoveController : MonoBehaviour
         if (currentHealth == 0)
         {
             PlayerDie();
+
         }
 
         else
@@ -302,6 +353,10 @@ public class MoveController : MonoBehaviour
             GetComponent<SpriteRenderer>().color = color;
             Invoke("HittingChange", hittingTime);
             Invoke("InvinsibleChange", invinsibleTime);
+
+            effectAudioSource.clip = hitClip;
+            effectAudioSource.volume = 1f;
+            effectAudioSource.Play();
         }
 
         // 뛰고 있을 때 아무 것도 안함
@@ -314,11 +369,15 @@ public class MoveController : MonoBehaviour
             isRunning = true;
             anim.SetFloat("runSpeed", 1f);
             effectAnim.SetTrigger("default");
+
             // 걷기 게이지 코루틴
             if (walkCor != null)
                 StopCoroutine(walkCor);
             walkCor = ProgressWalkTime(1);
             StartCoroutine(walkCor);
+
+            if (effectAudioSource.clip == chargeClip)
+                effectAudioSource.Stop();
         }
 
         return true;
@@ -353,8 +412,12 @@ public class MoveController : MonoBehaviour
         anim.SetTrigger("hit");
         effectAnim.SetTrigger("default");
         cameraMove.CameraStop();
-   
-        for(int i = 0; i < backgrounds.Length; i++)
+
+        effectAudioSource.clip = dieClip;
+        effectAudioSource.volume = 1f;
+        effectAudioSource.Play();
+
+        for (int i = 0; i < backgrounds.Length; i++)
         {
             backgrounds[i].StopBackgroundMove();
         }

@@ -81,4 +81,9 @@ public class MainGameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Title");
     }
+
+    public void ButtonSound()
+    {
+        SoundManager.instance.ButtonClickSound();
+    }
 }

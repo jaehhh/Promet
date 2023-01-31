@@ -29,9 +29,14 @@ public class TitleManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 
-#elif UNITY_WINDOW
+#elif UNITY_STANDALONE_WIN
         Application.Quit();
 
 #endif
+    }
+
+    public void ButtonSound()
+    {
+        SoundManager.instance.ButtonClickSound();
     }
 }

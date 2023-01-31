@@ -8,10 +8,17 @@ public class AttackController : MonoBehaviour
     private Rigidbody2D rigid;
     private MoveController moveController;
     private Animator animator;
+    private AudioSource audioSource;
 
     // 키
     private KeyCode meleeKey;
     private KeyCode shootKey;
+
+    // 오디오 클립
+    [SerializeField]
+    private AudioClip dashSound;
+    [SerializeField]
+    private AudioClip shootSound;
 
     // 쿨다운
     private float meleeCooldown = 2f;
@@ -36,6 +43,7 @@ public class AttackController : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         moveController = GetComponent<MoveController>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -64,6 +72,9 @@ public class AttackController : MonoBehaviour
 
             animator.SetTrigger("meleeAttack");
             meleeCurrentCooldown = meleeCooldown;
+
+            audioSource.clip = dashSound;
+            audioSource.Play();
         }
 
         // 원거리 공격
@@ -79,6 +90,9 @@ public class AttackController : MonoBehaviour
             clone.GetComponent<Projectile>().speed = moveController.RunSpeed * 2;
 
             shootCurrentCooldown = shootCooldown;
+
+            audioSource.clip = shootSound;
+            audioSource.Play();
         }
     }
 
